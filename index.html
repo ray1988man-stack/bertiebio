@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>柏諦生技 | 中草藥知識小學堂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D5A27; /* 深草本綠 */
+            --secondary: #6B8E23; /* 橄欖綠 */
+            --accent: #C5A059; /* 古典金 */
+            --bg: #F9F7F2; /* 宣紙米白 */
+            --text: #34495E;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans TC', sans-serif; }
+
+        body { background-color: var(--bg); color: var(--text); line-height: 1.8; overflow-x: hidden; }
+
+        /* --- 1. 首屏視覺衝擊 (動態漸層 + 浮動圖標) --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            color: white;
+            background: linear-gradient(-45deg, #2D5A27, #4A7044, #1E331B, #3D5229);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 漂浮的草本裝飾 */
+        .floating-herb {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 6px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            z-index: 10;
+            font-weight: 300;
+        }
+
+        /* --- 2. 主題導入 (朋友語氣) --- */
+        .intro-section {
+            padding: 100px 20px;
+            text-align: center;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .friend-note {
+            color: var(--primary);
+            font-weight: 500;
+            font-style: italic;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        /* --- 3. 三大重點 (加入中草藥圖形元素) --- */
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        
+        .knowledge-card {
+            background: white;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .knowledge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            padding: 25px 35px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            background: #fff;
+        }
+
+        /* 中草藥圖標容器 */
+        .herb-icon-container {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f4ef;
+            border-radius: 12px;
+            color: var(--primary);
+            transition: 0.3s;
+        }
+        .knowledge-card:hover .herb-icon-container {
+            background: var(--primary);
+            color: white;
+        }
+
+        .card-header h3 { color: var(--primary); font-size: 1.3rem; flex-grow: 1; }
+
+        .card-content {
+            padding: 0 35px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            background: #fafafa;
+            color: #555;
+            font-size: 1.05rem;
+        }
+
+        .card-content.open {
+            padding: 25px 35px 35px 105px; /* 留出圖標對齊空間 */
+            max-height: 400px;
+        }
+
+        /* --- 4. 提醒區 (加入圓框圖標) --- */
+        .tip-area {
+            background: #eceee8;
+            padding: 80px 20px;
+            margin-top: 50px;
+            border-radius: 60px 60px 0 0;
+        }
+
+        .tip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .tip-item {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .tip-item:hover {
+            border-color: var(--accent);
+            transform: scale(1.03);
+        }
+
+        .tip-circle-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--bg);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        /* --- 5. 底部互動 --- */
+        .footer-cta {
+            padding: 120px 20px;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            position: relative;
+        }
+
+        .final-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 22px 70px;
+            font-size: 1.4rem;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
+
+        .final-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        /* --- 6. 彈出視窗 --- */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.88);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .modal-box {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 35px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .official-link {
+            display: block;
+            background: #f8f9f8;
+            color: var(--primary);
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
+            transition: 0.3s;
+            margin-top: 25px;
+        }
+        .official-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 動畫輔助類 */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+
+    <!-- 漂浮裝飾 (SVG) -->
+    <header class="hero">
+        <svg class="floating-herb" style="top: 10%; left: 5%; width: 100px;" viewBox="0 0 24 24" fill="currentColor"><path d="M17,8C15.3,8 13.7,8.6 12.5,9.6L9.6,12.5C8.6,13.7 8,15.3 8,17L8,20L11,20C12.7,20 14.3,19.4 15.5,18.4L18.4,15.5C19.4,14.3 20,12.7 20,11L20,8L17,8M15,11A1,1 0 0,1 16,12A1,1 0 0,1 15,13A1,1 0 0,1 14,12A1,1 0 0,1 15,11M11,15A1,1 0 0,1 12,16A1,1 0 0,1 11,17A1,1 0 0,1 10,16A1,1 0 0,1 11,15Z"/></svg>
+        <svg class="floating-herb" style="bottom: 15%; right: 10%; width: 120px; animation-delay: 2s;" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C12,2 14.5,7 19,7C19,7 14,7.5 14,12C14,12 19,12.5 19,17C19,17 14,17 12,22C12,22 10,17 5,17C5,17 10,17 10,12C10,12 5,7.5 5,7C5,7 9.5,7 12,2Z"/></svg>
+
+        <h1>尋回草本的溫柔力量</h1>
+        <p>每一種藥草，都是大地對人類的溫柔叮嚀。<br>歡迎來到柏諦生技小學堂，重新找回健康的原始律動。</p>
+    </header>
+
+    <!-- 導入區 -->
+    <section class="intro-section reveal">
+        <span class="friend-note">「嘿，你知道嗎？最適合你的保養方案，其實早就在土地裡成長了千年。」</span>
+        <h2 style="font-size: 2.2rem; color: var(--primary);">柏諦生技 - 中草藥知識小學堂</h2>
+        <p style="margin-top: 25px; color: #666;">
+            我們不打算教你背誦深奧的本草綱目，而是想分享如何讓這些植物智慧，<br>
+            成為現代忙碌生活中，最安靜且強大的後盾。
+        </p>
+    </section>
+
+    <!-- 三大重點 -->
+    <div class="container">
+        <h2 class="reveal" style="text-align: center; margin-bottom: 50px; letter-spacing: 2px;">學堂核心重點</h2>
+        
+        <!-- 重點 1 -->
+        <div class="knowledge-card reveal">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="herb-icon-container">
+                    <!-- 人參/根部圖標 -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2C12,2 10,7 6,7C6,7 11,7.5 11,12C11,12 6,12.5 6,17C6,17 10,17 12,22C12,22 14,17 18,17C18,17 13,17 13,12C13,12 18,7.5 18,7C18,7 14,7 12,2Z"/></svg>
+                </div>
+                <h3>01. 嚴選產地：藥材的靈魂</h3>
+                <span>▼</span>
+            </div>
+            <div class="card-content">
+                <p>不是所有中草藥都有一樣的力量。柏諦生技堅持溯源管理，只有在純淨、無污染的土地培育出的中草藥，才能擁有最高濃度的活性精華。</p>
+            </div>
+        </div>
+
+        <!-- 重點 2 -->
+        <div class="knowledge-card reveal">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="herb-icon-container">
+                    <!-- 科學/實驗圖標 -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19,3H5V5H19V3M18.3,10.27L16,8.96V6H8V8.96L5.7,10.27C4.6,10.9 4,12 4,13.25V21H20V13.25C20,12 19.4,10.9 18.3,10.27M13,18H11V16H13V18M13,14H11V10H13V14Z"/></svg>
+                </div>
+                <h3>02. 科學萃取：去蕪存菁</h3>
+                <span>▼</span>
+            </div>
+            <div class="card-content">
+                <p>我們結合現代化檢驗與萃取技術，精準分析草本中的分子結構。剔除重金屬與雜質，只保留最純粹的營養，這就是「科學漢方」的承諾。</p>
+            </div>
+        </div>
+
+        <!-- 重點 3 -->
+        <div class="knowledge-card reveal">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="herb-icon-container">
+                    <!-- 天平/平衡圖標 -->
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20V4Z"/></svg>
+                </div>
+                <h3>03. 身體平衡：而非單點治療</h3>
+                <span>▼</span>
+            </div>
+            <div class="card-content">
+                <p>漢方哲學講求的是「調和」。不只解決當下的不適，更要透過草本的溫潤特性，教導身體找回自癒的節奏，達到內外兼修的完美狀態。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提醒區 -->
+    <section class="tip-area">
+        <div class="container">
+            <h2 class="reveal" style="text-align: center; margin-bottom: 20px;">給新手的暖心筆記</h2>
+            <div class="tip-grid">
+                <div class="tip-item reveal">
+                    <div class="tip-circle-icon">🌿</div>
+                    <h4>感受它的節奏</h4>
+                    <p>草本調理就像老友敘舊，需要時間培養感情。請給身體至少一個月的時間，去感受那種細微卻紮實的變化。</p>
+                </div>
+                <div class="tip-item reveal">
+                    <div class="tip-circle-icon">📖</div>
+                    <h4>聽聽身體的聲音</h4>
+                    <p>每個人的體質都是獨特的。在使用草本產品時，記得多留意身體的反饋，那是你與自然溝通最直接的方式。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 結尾 CTA -->
+    <section class="footer-cta reveal">
+        <h2>為您的健康，選擇一份自然的禮物</h2>
+        <p style="margin-top: 15px; opacity: 0.8;">這不僅是知識的傳遞，更是一份專業的守護。</p>
+        <button class="final-btn" onclick="openModal()">我懂了！</button>
+    </section>
+
+    <!-- 彈出視窗 -->
+    <div class="modal" id="resultModal">
+        <div class="modal-box">
+            <div style="font-size: 3.5rem; margin-bottom: 20px;">📜</div>
+            <h2>恭喜你完成學堂課程！</h2>
+            <p id="finalMessage">
+                <strong>「真正的養生，是學會溫柔地對待自己。」</strong><br><br>
+                很高興今天能與你分享這些草本智慧。<br>如果你想了解更多關於 40 年中醫背景研發的細節，歡迎來到我們的官網探索：
+            </p>
+            
+            <a href="https://www.bertiebio.com/?srsltid=AfmBOoqTTUiB7auxneb6fXPm8-1OH1zaSkNcB_h7g3hHqMUhRW48132c" 
+               target="_blank" 
+               class="official-link">
+               <strong>柏諦生技 Bertiebio 官方網站</strong><br>
+               <span style="font-size: 0.85rem; opacity: 0.8;">40年中醫背景研發｜科學之源，自然之選</span>
+            </a>
+
+            <div style="margin-top: 30px; cursor: pointer; color: #bbb; text-decoration: underline;" onclick="closeModal()">返回頁面</div>
+        </div>
+    </div>
+
+    <script>
+        // 1. 滾動動畫
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 2. 點擊展開卡片
+        function toggleCard(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('span');
+            const isOpen = content.classList.contains('open');
+            
+            document.querySelectorAll('.card-content').forEach(c => c.classList.remove('open'));
+            document.querySelectorAll('.card-header span').forEach(s => s.innerText = '▼');
+            
+            if (!isOpen) {
+                content.classList.add('open');
+                arrow.innerText = '▲';
+            }
+        }
+
+        // 3. 彈窗控制
+        function openModal() {
+            document.getElementById('resultModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(e) {
+            if (e.target == document.getElementById('resultModal')) closeModal();
+        }
+    </script>
+</body>
+</html>
